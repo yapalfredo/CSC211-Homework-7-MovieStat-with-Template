@@ -14,7 +14,7 @@ int main()
 	}
 	catch (exception& e)
 	{
-		//DO NOTHING
+		cout << e.what() << endl;
 	}
 
 	system("Pause");

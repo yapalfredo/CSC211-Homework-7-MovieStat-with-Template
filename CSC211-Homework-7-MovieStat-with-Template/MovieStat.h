@@ -67,8 +67,6 @@ public:
 	bool ifGreaterOrEqual(const T, const T, bool&);
 };
 
-
-
 template <class T>
 MovieStat<T>::MovieStat()
 {
@@ -171,12 +169,23 @@ void MovieStat<T>::questionA(ofstream& outFile)
 	const int SIZE = getInput();
 
 	cout << endl;
-	questionBandC(SIZE, outFile);
+
+	try
+	{
+		questionBandC(SIZE, outFile);
+	}
+	catch (string str)
+	{
+		cout << str << endl;
+	}
+	
 }
 
 template <class T>
 void MovieStat<T>::questionBandC(const int SIZE, ofstream& outFile)
 {
+	if (SIZE <= 0) throw string("Invalid Array/Input Size!");
+
 	const char * c1 = "The average of the array is: ";
 	const char * c2 = "The median of the array is: ";
 	//FOR DYNAMIC ALLOCATION	
