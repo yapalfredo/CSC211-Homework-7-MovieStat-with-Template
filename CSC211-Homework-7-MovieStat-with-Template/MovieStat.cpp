@@ -1,5 +1,236 @@
 #include "MovieStat.h"
 
+
+template <class T>
+MovieStat<T>::MovieStat()
+{
+	//CONSTRUCTOR
+
+	setMax(0);
+}
+
+template <class T>
+MovieStat<T>::~MovieStat()
+{
+	//DESTRUCTOR
+}
+
+template <class T>
+void MovieStat<T>::setInput(T input)
+{
+	//THIS FUNCTION SETS THE INPUT 
+	//VARIABLE FROM THE USER
+	this->input = input;
+}
+
+template <class T>
+T MovieStat<T>::getInput() const
+{
+	//THIS FUNCTION RETURNS THE INPUT
+	//TO THE USER
+	return input;
+}
+
+template <class T>
+void MovieStat<T>::setSum(T sum)
+{
+	//THIS FUNCTION SETS THE SUM
+	//VARIABLE FROM THE ARRAY
+	this->sum = sum;
+}
+
+template <class T>
+T MovieStat<T>::getSum() const
+{
+	//THIS FUNCTION RETURNS THE SUM
+	//VARIABLE VALUE FROM THE ARRAY
+	return sum;
+}
+
+template <class T>
+void MovieStat<T>::setMax(T max) {
+	//THIS FUNCTIONS SETS THE MAX
+	//VARIABLE. THIS COULD BE INITIALIZED
+	//OR BE CALLED WHILE LOOKING FOR THE
+	//LARGEST VALUE IN THE ARRAY
+	this->max = max;
+}
+
+template <class T>
+void MovieStat<T>::setMax(const T * movieArr, const int SIZE)
+{
+	//THIS FUNCTION WILL SET THE MAX VARIABLE VALUE
+	//DEPENDING ON THE LARGEST VALUE OF THE ELEMENT
+	//IN THE ARRAY
+	for (int i = 0; i < SIZE; i++)
+	{
+		for (int j = 0; j < SIZE; j++)
+		{
+			if (movieArr[i] > movieArr[j] && movieArr[i] > max)
+			{
+				setMax(movieArr[i]);
+			}
+			else if (movieArr[i] < movieArr[j] && movieArr[j] > max)
+			{
+				setMax(movieArr[j]);
+			}
+		}
+	}
+}
+
+template <class T>
+T MovieStat<T>::getMax() const
+{
+	//RETURNS THE MAX VARIABLE VALUE
+	return max;
+}
+
+template <class T>
+void MovieStat<T>::loadScreen(ofstream& outFile)
+{
+	//CALLS questionA()
+	questionA(outFile);
+}
+
+template <class T>
+void MovieStat<T>::questionA(ofstream& outFile)
+{
+	//FUNCTION CALLS INPUT VALIDATION
+	outFile.seekp(outFile.tellp());
+	inputValidation('A', input, outFile);
+
+	setInput(input);
+	const int SIZE = getInput();
+
+	cout << endl;
+
+	try
+	{
+		questionBandC(SIZE, outFile);
+	}
+	catch (string str)
+	{
+		cout << str << endl;
+	}
+
+}
+
+template <class T>
+void MovieStat<T>::questionBandC(const int SIZE, ofstream& outFile)
+{
+	if (SIZE <= 0) throw string("Invalid Array/Input Size!");
+
+	const char * c1 = "The average of the array is: ";
+	const char * c2 = "The median of the array is: ";
+	//FOR DYNAMIC ALLOCATION	
+	int * movieArr = new int[SIZE];
+
+	for (size_t i = 0; i < SIZE; i++)
+	{
+		outFile.seekp(outFile.tellp());
+		cout << "For student " << i + 1 << ": ";
+		outFile << "For student " << i + 1 << ": ";
+		inputValidation('B', input, outFile);
+		movieArr[i] = getInput();
+	}
+
+	cout << endl;
+	displayArray(movieArr, SIZE, outFile);
+
+	outFile.seekp(outFile.tellp());
+	cout << endl << endl << c1 << getAverage(SIZE) << endl << endl;
+	outFile << endl << endl << c1 << getAverage(SIZE) << endl << endl;
+	cout << c2 << getMedian(movieArr, SIZE) << endl;
+	outFile << c2 << getMedian(movieArr, SIZE) << endl;
+	setMax(movieArr, SIZE);
+	displayMode(movieArr, SIZE, outFile); cout << endl;
+
+	delete movieArr;
+	movieArr = nullptr;
+}
+
+template <class T>
+void MovieStat<T>::inputValidation(char caseChar, T& input, ofstream& outFile)
+{
+	//THIS FUNCTION VALIDATIONS THE INPUT
+	//IT WILL ONLY ACCEPT INPUTS GREATER THAN OR EQUAL TO ZERO
+
+	const char * c1 = "How many students were surveyed?: ";
+	const char * c2 = "Please enter the number of movies: ";
+	do {
+		switch (caseChar)
+		{
+		case 'A':	//QUESTION A
+			cout << c1;
+			cin >> input;
+			outFile << c1 << input << endl << endl;
+			break;
+		case 'B':
+			cout << c2;
+			cin >> input;
+			outFile << c2 << input << endl;
+			break;
+		default:
+			break;
+		}
+
+		if (input <= 0)
+		{
+			cout << "Only positive integers are accepted. Please try again!" << endl;
+		}
+	} while (input <= 0);
+}
+
+template <class T>
+void MovieStat<T>::displayArray(const T* movieArr, const int SIZE, ofstream& outFile)
+{
+	const char * c1 = "Your array of inputs are: ";
+	//THIS FUNCTION DISPLAY THE VALUES IN THE ARRAY
+
+	int sum = 0;	//THIS VARIABLE WILL HOLD
+					//THE SUM OF THE ARRAY
+	outFile.seekp(outFile.tellp());
+	cout << c1;
+	outFile << endl << c1;
+	for (int i = 0; i < SIZE; i++)
+	{
+		cout << movieArr[i] << " ";
+		outFile << movieArr[i] << " ";
+		sum += movieArr[i];
+	}
+
+	setSum(sum);
+}
+
+template <class T>
+T MovieStat<T>::getAverage(int SIZE) const
+{
+	//THIS FUNCTION CALCULATES THE AVERAGE VALUE OF THE ARRAY
+	return ((double)getSum() / (double)SIZE);
+}
+
+template <class T>
+T MovieStat<T>::getMedian(const T * movieArr, const int SIZE) const
+{
+	//THIS FUNCTION WILL GET THE MEDIAN IN THE ARRAY
+	double result;
+	int medianSize = SIZE / 2;
+
+	if (SIZE % 2 == 0)
+	{
+		//IF THE SIZE OF THE ARRAY IS EVEN. GET THE TWO MIDDLE VALUES
+		//AND COMPUTE THE AVERAGE
+		result = (double)(movieArr[medianSize] + movieArr[medianSize - 1] / 2);
+	}
+	else if (SIZE % 2 == 1)
+	{
+		//ELSE, JUST GET THE MIDDLE ELEMENT
+		result = movieArr[medianSize];
+	}
+
+	return result;
+}
+
 template <class T>
 void MovieStat<T>::displayMode(const T* movieArr, const int SIZE, ofstream& outFile)
 {

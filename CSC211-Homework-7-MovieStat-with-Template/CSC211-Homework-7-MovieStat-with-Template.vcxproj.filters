@@ -25,6 +25,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MovieStat.cpp" />
+    <None Include="MovieStat.cpp">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
