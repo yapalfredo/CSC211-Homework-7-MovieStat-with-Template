@@ -25,6 +25,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MovieStat.tpp" />
+    <None Include="MovieStat.cpp" />
   </ItemGroup>
 </Project>

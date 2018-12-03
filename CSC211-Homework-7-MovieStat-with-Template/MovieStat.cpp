@@ -1,3 +1,5 @@
+#include "MovieStat.h"
+
 template <class T>
 void MovieStat<T>::displayMode(const T* movieArr, const int SIZE, ofstream& outFile)
 {

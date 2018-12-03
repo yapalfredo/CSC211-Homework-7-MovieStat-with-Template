@@ -1,3 +1,6 @@
+#ifndef _MOVIESTAT_H_
+#define _MOVIESTAT_H_
+
 #pragma once
 #include <iostream>
 #include <string>
@@ -298,7 +301,9 @@ T MovieStat<T>::getMedian(const T * movieArr, const int SIZE) const
 }
 
 
-#include "MovieStat.tpp"
+#include "MovieStat.cpp"
+
+#endif
 
 //template <class T>
 //void MovieStat<T>::displayMode(const T* movieArr, const int SIZE, ofstream& outFile)
